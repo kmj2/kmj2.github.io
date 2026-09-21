@@ -4,6 +4,7 @@
     --background: #fff;
     --text: #303030;
     --secondary: #646464;
+    --muted: #757575;
     --link: #245b86;
     --rule: #e2e2e2;
     --control-border: #858585;
@@ -32,6 +33,7 @@
     --background: #202020;
     --text: #e6e6e6;
     --secondary: #b3b3b3;
+    --muted: #919191;
     --link: #9dc4e3;
     --rule: #484848;
     --control-border: #959595;
@@ -70,12 +72,12 @@ main { flex: 1; min-width: 0; display: flow-root; }
 .site-header a:hover, .site-header a:focus-visible { color: var(--link); text-decoration: underline; }
 .site-header a[aria-current="page"] { color: var(--text); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.5em; }
 main > section { margin-top: 3.25rem; }
-.about { display: grid; grid-template-columns: minmax(0, 1fr) 8.5rem; column-gap: 3rem; padding-top: 0.25rem; }
+.about { display: grid; grid-template-columns: minmax(0, 1fr) 18rem; column-gap: 3rem; padding-top: 0.25rem; }
 .profile-heading, .bio, .contact-links { grid-column: 1; }
 .research-area { margin-top: 0.25rem; color: var(--secondary); }
 .bio { margin-top: 1.5rem; max-width: 65ch; text-wrap: pretty; }
 .bio p + p { margin-top: 1rem; }
-.portrait { grid-column: 2; grid-row: 1 / 4; width: 8.5rem; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 40%; margin-top: 0.5rem; }
+.portrait { grid-column: 2; grid-row: 1 / 4; width: 18rem; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 40%; margin-top: 0.5rem; }
 .contact-links { display: flex; flex-wrap: wrap; gap: 0.25rem 1.125rem; list-style: none; padding: 0; margin-top: 1.125rem; font-size: var(--small); }
 .contact-links a { display: inline-block; padding-block: 0.25rem; }
 .interests { grid-column: 1 / -1; margin-top: 1.5rem; color: var(--secondary); font-size: var(--small); }
@@ -89,6 +91,31 @@ section > .page-title, #news > h2, .section-heading { padding-bottom: 0.625rem; 
 .school-details { flex: 1 1 12rem; min-width: 0; }
 .news-list, .honors-list { list-style: none; padding: 0; }
 .news-list .dated-entry { margin-top: 0.625rem; }
+.news-window { position: relative; }
+.news-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--rule) transparent; scroll-padding-block: 2.5rem; }
+.news-scroll .news-list { display: flow-root; }
+.news-window::before, .news-window::after { content: ""; position: absolute; z-index: 1; inset-inline: 0; height: 2.5rem; pointer-events: none; }
+.news-window::before { top: 0; background: linear-gradient(to bottom, var(--background), transparent); opacity: var(--news-fade-top, 0); }
+.news-window::after { bottom: 0; background: linear-gradient(to top, var(--background), transparent); opacity: var(--news-fade-bottom, 0); }
+.news-scroll:focus-visible { outline: none; }
+.news-window:has(.news-scroll:focus-visible) { outline: 2px solid var(--link); outline-offset: 4px; }
+.news-more { position: absolute; z-index: 2; bottom: -1.75rem; left: 50%; transform: translateX(-50%); display: grid; place-items: center; width: 4rem; height: 2.75rem; padding: 0; border: 0; border-radius: 0.5rem; background: none; color: var(--secondary); opacity: 0; pointer-events: none; }
+/* A borderless scroll cue; its quiet hover surface stays inside the 44 px hit area. */
+.news-more::before { content: ""; position: absolute; inset: 0.5rem 0; border-radius: inherit; background: var(--surface); opacity: 0; }
+.news-more svg { position: relative; width: 1.5rem; height: 1.5rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.news-more[data-visible="true"] { opacity: 1; pointer-events: auto; }
+.news-more:hover, .news-more:focus-visible { color: var(--text); }
+.news-more:focus-visible::before { opacity: 1; }
+@media (hover: hover) {
+    .news-more:hover::before { opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    .news-more { transition: opacity 150ms ease-out; }
+    .news-more::before { transition: opacity 150ms ease-out; }
+    .news-more svg { transition: transform 150ms ease-out; }
+    .news-more:hover svg, .news-more:focus-visible svg { transform: translateY(2px); }
+    .news-more:active svg { transform: translateY(3px); }
+}
 .section-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1rem; margin-bottom: 1.5rem; }
 .section-heading .page-title { margin: 0; }
 .project-filters { display: flex; flex-wrap: wrap; gap: 0.875rem; }
@@ -131,6 +158,12 @@ summary { color: var(--link); width: fit-content; padding-block: 0.25rem; text-d
 .subheading { margin-block: 1.75rem 1rem; color: var(--secondary); font-size: var(--small); font-weight: 500; }
 .site-footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.75rem 1rem; border-top: 1px solid var(--rule); margin-top: 3.5rem; padding-block: 1.25rem 2.5rem; font-size: var(--small); color: var(--secondary); }
 .footer-links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1rem; }
+.footer-update { flex: 0 0 100%; order: 3; text-align: center; font-size: 0.79rem; color: var(--muted); }
+@media (min-width: 56rem) {
+    .site-footer { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+    .footer-update { order: 0; }
+    .footer-links { justify-self: end; }
+}
 .text-button { padding: 0.25rem 0; border: 0; background: none; color: var(--link); text-decoration: underline; text-underline-offset: 0.18em; }
 .skip-link { position: fixed; z-index: 20; top: 0.5rem; left: 1rem; background: var(--background); padding: 0.5rem 1rem; transform: translateY(-200%); }
 .skip-link:focus { transform: none; }
@@ -187,6 +220,8 @@ textarea { resize: vertical; }
     .page { display: block; min-height: 0; max-width: none; padding: 0; }
     .site-header, .site-footer, .project-filters, .project-figures, dialog, .skip-link { display: none !important; }
     .project[hidden] { display: grid !important; }
+    .news-scroll { max-height: none !important; overflow: visible; }
+    .news-window::before, .news-window::after, .news-more { display: none; }
     .project ~ .project { margin-top: 1.75rem; padding-top: 1.75rem; border-top: 1px solid var(--rule); }
     main > section { margin-top: 1.5rem; }
     .project, .dated-entry { break-inside: avoid; }

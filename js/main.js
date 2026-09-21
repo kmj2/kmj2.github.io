@@ -32,6 +32,75 @@ themeButton.addEventListener('click', () => {
     updateThemeButton();
 });
 
+// Keep authoring News as a plain list; enhance it only when scrolling is needed.
+const newsList = document.querySelector('.news-list');
+if (newsList) {
+    const frame = document.createElement('div');
+    frame.className = 'news-window';
+    const viewport = document.createElement('div');
+    viewport.className = 'news-scroll';
+    newsList.before(frame);
+    frame.append(viewport);
+    viewport.append(newsList);
+    viewport.id = 'news-archive';
+
+    const moreButton = document.createElement('button');
+    moreButton.type = 'button';
+    moreButton.className = 'news-more';
+    moreButton.setAttribute('aria-label', 'Scroll to older news');
+    moreButton.setAttribute('aria-controls', viewport.id);
+    const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    chevron.setAttribute('viewBox', '0 0 24 24');
+    chevron.setAttribute('aria-hidden', 'true');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'm5 9 7 6 7-6');
+    chevron.append(path);
+    moreButton.append(chevron);
+    frame.append(moreButton);
+    moreButton.addEventListener('click', () => {
+        viewport.scrollBy({
+            top: viewport.clientHeight * 0.75,
+            behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
+        });
+    });
+
+    function updateNewsFades() {
+        const remaining = viewport.scrollHeight - viewport.clientHeight - viewport.scrollTop;
+        const fadeDistance = parseFloat(getComputedStyle(document.documentElement).fontSize) * 2.5;
+        // Fade strength tracks the distance to each edge, without a scroll animation.
+        frame.style.setProperty('--news-fade-top', Math.min(1, Math.max(0, viewport.scrollTop) / fadeDistance));
+        frame.style.setProperty('--news-fade-bottom', Math.min(1, Math.max(0, remaining - 1) / fadeDistance));
+        const hasMore = remaining > 1;
+        // Keep keyboard focus usable when the control disappears at the end.
+        if (!hasMore && document.activeElement === moreButton) viewport.focus({ preventScroll: true });
+        moreButton.inert = !hasMore;
+        moreButton.dataset.visible = String(hasMore);
+    }
+
+    function sizeNewsViewport() {
+        const entries = [...newsList.children];
+        if (entries.length > 5) {
+            // Measure actual content, including wrapping, spacing and enlarged text.
+            const height = entries[4].getBoundingClientRect().bottom - newsList.getBoundingClientRect().top;
+            viewport.style.maxHeight = Math.ceil(height) + 'px';
+            viewport.tabIndex = 0;
+            viewport.setAttribute('role', 'region');
+            viewport.setAttribute('aria-label', 'News archive');
+        } else {
+            viewport.style.removeProperty('max-height');
+            viewport.removeAttribute('tabindex');
+            viewport.removeAttribute('role');
+            viewport.removeAttribute('aria-label');
+        }
+        updateNewsFades();
+    }
+
+    viewport.addEventListener('scroll', updateNewsFades, { passive: true });
+    new ResizeObserver(sizeNewsViewport).observe(newsList);
+    new MutationObserver(sizeNewsViewport).observe(newsList, { childList: true, subtree: true, characterData: true });
+    sizeNewsViewport();
+}
+
 const filters = document.querySelectorAll('.filter-button');
 const projects = document.querySelectorAll('.project');
 const filterGroup = document.querySelector('.project-filters');
