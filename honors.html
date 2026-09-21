@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Minjong Kim’s honors, awards, and scholarships.">
+    <meta name="color-scheme" content="light dark">
+    <title>Honors &amp; Awards | Minjong Kim</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/theme.js"></script>
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="page">
+        <header class="site-header">
+            <nav aria-label="Main navigation">
+                <a href="index.html">Home</a>
+                <a href="projects.html">Projects</a>
+                <a href="education.html">Education</a>
+                <a href="experience.html">Experience</a>
+                <a href="honors.html" aria-current="page">Honors &amp; Awards</a>
+            </nav>
+        </header>
+
+        <main id="main" tabindex="-1">
+            <section id="honors" aria-labelledby="honors-title">
+                <h1 id="honors-title" class="page-title">Honors &amp; Awards</h1>
+                <ul class="honors-list">
+                    <li class="dated-entry"><p class="entry-date">2024 – Present</p><div><h2 class="entry-title">National Scholarship for Science and Engineering</h2><p>Full tuition scholarship for two years, Korea Student Aid Foundation (KOSAF)</p></div></li>
+                    <li class="dated-entry"><p class="entry-date">Fall 2024</p><div><h2 class="entry-title">Dean’s List</h2><p>Top 3% of the College of Engineering, UNIST</p></div></li>
+                    <li class="dated-entry"><p class="entry-date">Spring 2023</p><div><h2 class="entry-title">Dean’s List</h2><p>Top 3% of the College of Engineering, UNIST</p></div></li>
+                    <li class="dated-entry"><p class="entry-date">2020 – Present</p><div><h2 class="entry-title">UNIST Scholarship</h2><p>Full tuition scholarship until graduation, UNIST</p></div></li>
+                    <li class="dated-entry"><p class="entry-date">2019</p><div><h2 class="entry-title">KAIST Presidential Award</h2><p>2nd Award, 2019 CanSat Competition, hosted by Korea Aerospace Research Institute (KARI)</p></div></li>
+                    <li class="dated-entry"><p class="entry-date">2019</p><div><h2 class="entry-title">Minister of Environment Award</h2><p>1st Award, 2019 Design Thinking Hackathon, hosted by Dajeon Education &amp; Science Research Institute</p></div></li>
+                </ul>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>© <span id="copyright-year">2026</span> Minjong Kim</p>
+            <div class="footer-links">
+                <button type="button" class="text-button" id="guestbook-btn" hidden>Guestbook</button>
+                <button type="button" class="text-button" id="theme-toggle" aria-pressed="false" hidden>Dark mode</button>
+                <a href="#main">Back to top</a>
+            </div>
+        </footer>
+    </div>
+
+    <dialog id="guestbook-modal" aria-labelledby="guestbook-title">
+        <div class="modal-header">
+            <h2 id="guestbook-title">Guestbook</h2>
+            <button type="button" class="text-button" id="modal-close">Close</button>
+        </div>
+        <p class="secondary guestbook-intro">Leave a public message.</p>
+        <form id="guestbook-form">
+            <label for="gb-name">Name</label>
+            <input type="text" id="gb-name" autocomplete="nickname" maxlength="20" required>
+            <label for="gb-content">Message</label>
+            <textarea id="gb-content" rows="3" maxlength="100" required></textarea>
+            <button id="gb-submit" class="submit-button" type="submit" disabled>Post message</button>
+            <p id="gb-status" class="secondary" role="status"></p>
+        </form>
+        <div id="guestbook-list" class="guestbook-list" aria-busy="true"><p>Loading messages…</p></div>
+    </dialog>
+</body>
+</html>

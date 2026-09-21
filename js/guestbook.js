@@ -1,8 +1,6 @@
-// 1. Firebase 라이브러리 임포트 (CDN 방식)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// 2. Firebase 설정 (본인의 키값으로 교체하세요!)
 const firebaseConfig = {
   apiKey: "AIzaSyAQLY8tCXACRBur3qyZH75Sy1GQIjdDMSk",
   authDomain: "personal-hompage-3f993.firebaseapp.com",
@@ -11,90 +9,97 @@ const firebaseConfig = {
   messagingSenderId: "98805444808",
   appId: "1:98805444808:web:9ad5b3298c98595632b5fd"
 };
-
-// 3. 앱 초기화
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// 4. DOM 요소 가져오기
+const db = getFirestore(initializeApp(firebaseConfig));
+const form = document.getElementById('guestbook-form');
 const nameInput = document.getElementById('gb-name');
 const contentInput = document.getElementById('gb-content');
-const submitBtn = document.getElementById('gb-submit');
-const listContainer = document.getElementById('guestbook-list');
+const submitButton = document.getElementById('gb-submit');
+const status = document.getElementById('gb-status');
+const list = document.getElementById('guestbook-list');
+submitButton.disabled = false;
 
-// 5. 메시지 저장 함수 (Create)
-async function saveMessage() {
+// Preserve the existing owner notification, loading its SDK only when needed.
+let emailReady;
+function notifyOwner(name, message) {
+    if (!emailReady) {
+        emailReady = new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+            script.onload = () => {
+                if (!window.emailjs) {
+                    reject(new Error('Notification service unavailable'));
+                    return;
+                }
+                window.emailjs.init('JNc6tcs7gY5u1bHUW');
+                resolve(window.emailjs);
+            };
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    }
+    return emailReady.then(client => client.send('service_hfspbfg', 'template_x2x12uq', {
+        from_name: name,
+        message
+    }));
+}
+
+form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (submitButton.disabled) return;
     const name = nameInput.value.trim();
-    const content = contentInput.value.trim();
-
-    if (!name || !content) {
-        alert("이름과 내용을 모두 입력해주세요!");
+    const message = contentInput.value.trim();
+    if (!name || !message) {
+        status.textContent = 'Please enter your name and a message.';
+        (!name ? nameInput : contentInput).focus();
         return;
     }
 
+    submitButton.disabled = true;
+    status.textContent = 'Posting message…';
     try {
-        await addDoc(collection(db, "guestbook"), {
-            name: name,
-            message: content,
-            timestamp: new Date() // 서버 시간이 아닌 로컬 시간 기준 (간편함)
-        });
-
-        emailjs.send("service_hfspbfg", "template_x2x12uq", {
-            from_name: name,    // 템플릿의 {{from_name}}에 들어감
-            message: content    // 템플릿의 {{message}}에 들어감
-        });
-        
-        // 입력창 비우기
-        contentInput.value = '';
-        alert("방명록이 등록되었습니다! (주인장에게 알림이 전송되었습니다.)");
-    } catch (e) {
-        console.error("Error adding document: ", e);
-        alert("등록 중 오류가 발생했습니다.");
+        await addDoc(collection(db, 'guestbook'), { name, message, timestamp: new Date() });
+    } catch {
+        status.textContent = 'Your message could not be posted. Please try again.';
+        submitButton.disabled = false;
+        return;
     }
-}
-
-// 버튼 클릭 이벤트
-submitBtn.addEventListener('click', saveMessage);
-
-// 6. 실시간 데이터 불러오기 (Read)
-const q = query(collection(db, "guestbook"), orderBy("timestamp", "desc"), limit(20));
-
-onSnapshot(q, (snapshot) => {
-    // 로딩 메시지 제거
-    listContainer.innerHTML = '';
-
-    snapshot.forEach((doc) => {
-        const data = doc.data();
-        const date = data.timestamp.toDate ? data.timestamp.toDate() : new Date(data.timestamp);
-        
-        // 날짜 포맷팅 (YYYY.MM.DD)
-        const dateStr = `${date.getFullYear()}.${date.getMonth()+1}.${date.getDate()}`;
-
-        // HTML 요소 생성
-        const item = document.createElement('div');
-        item.className = 'gb-item';
-        item.innerHTML = `
-            <div class="gb-content-wrapper">
-                <span class="gb-author">${escapeHtml(data.name)}</span>
-                <span class="gb-text">${escapeHtml(data.message)}</span>
-            </div>
-            <span class="gb-date">${dateStr}</span>
-        `;
-        listContainer.appendChild(item);
-    });
-
-    if(snapshot.empty) {
-        listContainer.innerHTML = '<p style="text-align:center; color:var(--text-light);">첫 번째 방문자가 되어주세요!</p>';
-    }
+    contentInput.value = '';
+    status.textContent = 'Your message has been posted.';
+    submitButton.disabled = false;
+    // A notification failure must not suggest reposting an already saved message.
+    notifyOwner(name, message).catch(() => {});
 });
 
-// XSS 방지용 함수 (보안)
-function escapeHtml(text) {
-    if (!text) return text;
-    return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
+const messages = query(collection(db, 'guestbook'), orderBy('timestamp', 'desc'), limit(20));
+const dateFormat = new Intl.DateTimeFormat(document.documentElement.lang, {
+    year: 'numeric', month: 'short', day: 'numeric'
+});
+onSnapshot(messages, snapshot => {
+    list.replaceChildren();
+    list.setAttribute('aria-busy', 'false');
+    snapshot.forEach(document => {
+        const data = document.data();
+        const item = window.document.createElement('article');
+        item.className = 'gb-item';
+        const author = window.document.createElement('span');
+        author.className = 'gb-author';
+        author.textContent = data.name || 'Guest';
+        const message = window.document.createElement('p');
+        message.className = 'gb-text';
+        message.textContent = data.message || '';
+        item.append(author, message);
+        const date = data.timestamp?.toDate ? data.timestamp.toDate() : new Date(data.timestamp);
+        if (!Number.isNaN(date.getTime())) {
+            const time = window.document.createElement('time');
+            time.className = 'gb-date';
+            time.dateTime = date.toISOString();
+            time.textContent = dateFormat.format(date);
+            item.append(time);
+        }
+        list.append(item);
+    });
+    if (snapshot.empty) list.textContent = 'No messages yet.';
+}, () => {
+    list.setAttribute('aria-busy', 'false');
+    list.textContent = 'Messages could not be loaded. Please reload the page to try again.';
+});

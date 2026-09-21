@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Minjong Kim’s research projects in wearable robotics, gait analysis, and biomechanics.">
+    <meta name="color-scheme" content="light dark">
+    <title>Projects | Minjong Kim</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/theme.js"></script>
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="page">
+        <header class="site-header">
+            <nav aria-label="Main navigation">
+                <a href="index.html">Home</a>
+                <a href="projects.html" aria-current="page">Projects</a>
+                <a href="education.html">Education</a>
+                <a href="experience.html">Experience</a>
+                <a href="honors.html">Honors &amp; Awards</a>
+            </nav>
+        </header>
+
+        <main id="main" tabindex="-1">
+            <section id="projects" aria-labelledby="projects-title">
+                <div class="section-heading">
+                    <h1 id="projects-title" class="page-title">Projects</h1>
+                    <div class="project-filters" role="group" aria-label="Filter projects" hidden>
+                        <button type="button" class="filter-button" data-filter="all" aria-pressed="true">All</button>
+                        <button type="button" class="filter-button" data-filter="ongoing" aria-pressed="false">Ongoing</button>
+                        <button type="button" class="filter-button" data-filter="completed" aria-pressed="false">Completed</button>
+                    </div>
+                </div>
+                <p id="filter-status" class="sr-only" role="status"></p>
+                <article class="project" data-status="ongoing">
+                    <div class="project-period">
+                        <p class="entry-date">Nov 2025 – Present</p>
+                        <p class="project-status">Ongoing</p>
+                    </div>
+                    <div class="project-content">
+                        <h2 class="entry-title">Foot Clearance Analysis</h2>
+                        <p class="project-meta">Lead Researcher</p>
+                        <p>Analyzing how foot clearance definitions affect gait and mobility assessment, and validating measurement methods using motion capture and IMU data.</p>
+                        <p class="project-topics">MoCap, Python, Biomechanics</p>
+                        <p class="project-links secondary">Code: private repository</p>
+                    </div>
+                </article>
+                <article class="project" data-status="completed">
+                    <div class="project-period">
+                        <p class="entry-date">Nov 2025</p>
+                        <p class="project-status">Completed</p>
+                    </div>
+                    <div class="project-content">
+                        <h2 class="entry-title">Real-time IMU Gait Metrics</h2>
+                        <p class="project-meta">Developer</p>
+                        <p>Implemented a real-time system for analyzing gait metrics using Xsens DOT sensors.</p>
+                        <p class="project-topics">IMU, Real-time Processing, Gait Analysis</p>
+                        <p class="project-links"><a href="https://github.com/kmj2/Real-Time_IMU_Gait_Metric">Code on GitHub</a></p>
+                        <details class="project-figures">
+                            <summary>View project image</summary>
+                            <div class="figure-list">
+                                <figure class="gallery-slide"><img src="images/project-imu_demo1.png" alt="Real-time gait metrics application using IMU sensor data" width="2163" height="1622" loading="lazy"></figure>
+                            </div>
+                        </details>
+                    </div>
+                </article>
+                <article class="project" data-status="completed">
+                    <div class="project-period">
+                        <p class="entry-date">Jan 2025 – Feb 2025</p>
+                        <p class="project-status">Completed</p>
+                    </div>
+                    <div class="project-content">
+                        <h2 class="entry-title">Motion Capture Gait Analysis</h2>
+                        <p class="project-meta">Lead Researcher</p>
+                        <p>Implemented automatic detection of gait events (heel-strike and toe-off) from motion capture data, and calculated spatiotemporal gait parameters.</p>
+                        <p class="project-topics">Motion Capture, Biomechanics, Gait Analysis</p>
+                        <p class="project-links secondary">Code: private repository</p>
+                        <details class="project-figures">
+                            <summary>View project images (3)</summary>
+                            <div class="figure-list">
+                                <figure class="gallery-slide"><img src="images/project-moga1.png" alt="Motion capture gait analysis, figure 1" loading="lazy"></figure>
+                                <figure class="gallery-slide"><img src="images/project-moga2.png" alt="Motion capture gait analysis, figure 2" loading="lazy"></figure>
+                                <figure class="gallery-slide"><img src="images/project-moga3.png" alt="Motion capture gait analysis, figure 3" loading="lazy"></figure>
+                            </div>
+                        </details>
+                    </div>
+                </article>
+                <article class="project" data-status="completed">
+                    <div class="project-period">
+                        <p class="entry-date">Mar 2024 – Aug 2024</p>
+                        <p class="project-status">Completed</p>
+                    </div>
+                    <div class="project-content">
+                        <h2 class="entry-title">Robotic Shoulder Arthroscope</h2>
+                        <p class="project-meta">Robot Control</p>
+                        <p>Designed control algorithms for a robotic shoulder arthroscope based on head-motion tracking. Used inverse kinematics to map head movements to the robot’s end-effector position.</p>
+                        <p class="project-topics">Robotic Control, Real-time Processing, Medical Robotics</p>
+                        <p class="project-links secondary">Code: private repository</p>
+                        <details class="project-figures">
+                            <summary>View project images (2)</summary>
+                            <div class="figure-list">
+                                <figure class="gallery-slide"><img src="images/project-BTS1.png" alt="Robotic shoulder arthroscope project, figure 1" loading="lazy"></figure>
+                                <figure class="gallery-slide"><img src="images/project-BTS2.png" alt="Robotic shoulder arthroscope project, figure 2" loading="lazy"></figure>
+                            </div>
+                        </details>
+                    </div>
+                </article>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>© <span id="copyright-year">2026</span> Minjong Kim</p>
+            <div class="footer-links">
+                <button type="button" class="text-button" id="guestbook-btn" hidden>Guestbook</button>
+                <button type="button" class="text-button" id="theme-toggle" aria-pressed="false" hidden>Dark mode</button>
+                <a href="#main">Back to top</a>
+            </div>
+        </footer>
+    </div>
+
+    <dialog id="guestbook-modal" aria-labelledby="guestbook-title">
+        <div class="modal-header">
+            <h2 id="guestbook-title">Guestbook</h2>
+            <button type="button" class="text-button" id="modal-close">Close</button>
+        </div>
+        <p class="secondary guestbook-intro">Leave a public message.</p>
+        <form id="guestbook-form">
+            <label for="gb-name">Name</label>
+            <input type="text" id="gb-name" autocomplete="nickname" maxlength="20" required>
+            <label for="gb-content">Message</label>
+            <textarea id="gb-content" rows="3" maxlength="100" required></textarea>
+            <button id="gb-submit" class="submit-button" type="submit" disabled>Post message</button>
+            <p id="gb-status" class="secondary" role="status"></p>
+        </form>
+        <div id="guestbook-list" class="guestbook-list" aria-busy="true"><p>Loading messages…</p></div>
+    </dialog>
+</body>
+</html>
