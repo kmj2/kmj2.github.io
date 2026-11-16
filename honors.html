@@ -17,6 +17,7 @@
             <nav aria-label="Main navigation">
                 <a href="index.html">Home</a>
                 <a href="projects.html">Projects</a>
+                <a href="publications.html">Publications</a>
                 <a href="education.html">Education</a>
                 <a href="experience.html">Experience</a>
                 <a href="honors.html" aria-current="page">Honors &amp; Awards</a>
@@ -41,30 +42,12 @@
 
         <footer class="site-footer">
             <p>© <span id="copyright-year">2026</span> Minjong Kim</p>
-            <p class="footer-update">Last Update: <time datetime="2026-09-22">2026.09.22.</time></p>
+            <p class="footer-update">Last Update: <time datetime="2026-11-17">2026.11.17.</time></p>
             <div class="footer-links">
-                <button type="button" class="text-button" id="guestbook-btn" hidden>Guestbook</button>
                 <button type="button" class="text-button" id="theme-toggle" aria-pressed="false" hidden>Dark mode</button>
                 <a href="#main">Back to top</a>
             </div>
         </footer>
     </div>
-
-    <dialog id="guestbook-modal" aria-labelledby="guestbook-title">
-        <div class="modal-header">
-            <h2 id="guestbook-title">Guestbook</h2>
-            <button type="button" class="text-button" id="modal-close">Close</button>
-        </div>
-        <p class="secondary guestbook-intro">Leave a public message.</p>
-        <form id="guestbook-form">
-            <label for="gb-name">Name</label>
-            <input type="text" id="gb-name" autocomplete="nickname" maxlength="20" required>
-            <label for="gb-content">Message</label>
-            <textarea id="gb-content" rows="3" maxlength="100" required></textarea>
-            <button id="gb-submit" class="submit-button" type="submit" disabled>Post message</button>
-            <p id="gb-status" class="secondary" role="status"></p>
-        </form>
-        <div id="guestbook-list" class="guestbook-list" aria-busy="true"><p>Loading messages…</p></div>
-    </dialog>
 </body>
 </html>

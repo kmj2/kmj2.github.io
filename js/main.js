@@ -201,26 +201,4 @@ document.querySelector('.footer-links a[href="#main"]').addEventListener('click'
     window.scrollTo({ top: 0, behavior: 'instant' });
 });
 
-const dialog = document.getElementById('guestbook-modal');
-const guestbookButton = document.getElementById('guestbook-btn');
-let guestbookLoaded = false;
-guestbookButton.hidden = false;
-guestbookButton.addEventListener('click', async () => {
-    dialog.showModal();
-    if (guestbookLoaded) return;
-    guestbookLoaded = true;
-    try {
-        await import('./guestbook.js');
-    } catch {
-        const list = document.getElementById('guestbook-list');
-        list.textContent = 'The guestbook could not be loaded. Please reload the page to try again.';
-        list.setAttribute('aria-busy', 'false');
-    }
-});
-document.getElementById('modal-close').addEventListener('click', () => dialog.close());
-dialog.addEventListener('click', event => {
-    const bounds = dialog.getBoundingClientRect();
-    if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.close();
-});
-
 document.getElementById('copyright-year').textContent = new Date().getFullYear();
